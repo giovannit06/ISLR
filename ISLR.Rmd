@@ -1,0 +1,69 @@
+---
+title: "ISLR"
+author: "GT"
+date: "15 septembre 2016"
+output: html_document
+---
+
+## Chapter 2
+
+Load the `Auto` data set. This data set is part of the `ISLR` library.
+
+```{r}
+library(ISLR)
+```
+
+
+```{r}
+dim(Auto)
+
+# Check the variables names
+names(Auto)
+```
+
+We can use the `plot()` function to produce _scatterplots_ of quantitative
+variables.
+
+```{r}
+plot(Auto$cylinders, Auto$mpg)
+```
+
+The `cylinders` variable is stored as a numeric vector, so R has 
+treated it as quantitative. However, since there are only a small
+number possible values for cylinders, one may prefer to treat it
+as a qualitative variable.
+
+```{r}
+# The as.factor() function converts quantitative variable into
+# qualitative variable
+Auto$cylinders = as.factor(Auto$cylinders)
+```
+
+If the variable plotted on the x-axis is categorical, then
+_boxplots_ will be automatically be produced by the `plot()`
+function.
+
+```{r}
+plot(Auto$cylinders, Auto$mpg, col="red", varwidth=T, xlab="cylinders",
+     ylab="MPG")
+```
+
+The `hist()` function can be used to plot a _histogram_.
+
+```{r}
+hist(Auto$mpg, col=2, breaks=15)
+```
+
+The `pairs() function creates a _scatterplot matrix_.
+
+```{r}
+pairs(~ mpg + displacement + horsepower + weight + acceleration, Auto)
+```
+
+The `summary()` function produces a numerical summary of each variable
+in a particular data set
+
+```{r}
+summary(Auto)
+```
+
