@@ -67,3 +67,191 @@ in a particular data set
 summary(Auto)
 ```
 
+## Chapter 3
+
+### Simple Linear Regression
+
+Here we load the `MASS` package, which is a very large collection of
+data sets and functions. We also load the ISLR package, which includes
+the data sets assoctiated with the book.
+
+```{r}
+library(MASS)
+library(ISLR)
+```
+
+The `MASS` library contains the `Boston` data set, which records
+`medv` (median house value) for 506 neighborhoods around Boston.
+We will seek to predict `medv` using 13 predictors such as `rm` 
+(average number of rooms per house), `age` (average age of houses), 
+and `lstat` (percent of households with low socioeconomic status).
+
+```{r}
+names(Boston)
+```
+
+We will start by using the `lm()` function to fit a simple
+linear regression model, with `medv` as the response and 
+`lstat` as the predictor.
+
+```{r}
+lm.fit=lm(medv~lstat, data=Boston)
+lm.fit
+```
+
+Some basic information about the model is output. For more
+detailed information, we use `summary(lm.fit)`. This gives us
+p-values and standard errors for the coefficients, as well as
+the R-squared statistic and F-statistic for the model.
+
+```{r}
+summary(lm.fit)
+```
+
+We can use `names()` function in order to find out what other
+pieces of information are stored in `lm.fit`. Although we can
+extract these quantities by name, `lm.fit$coefficients`, it is
+safer to use the extractor function like `coef()` to access them.
+
+```{r}
+names(lm.fit)
+lm.fit$coefficients
+coef(lm.fit)
+```
+
+In order to obtain a confidence interval for the coefficient
+estimates, we can use the `confint()` command.
+
+```{r}
+confint(lm.fit)
+```
+
+The `predict()` function can be used to produce confidence
+intervals and prediction intervals for the prediction of `medv`
+for a given value of `lstat`.
+
+```{r}
+predict(lm.fit, data.frame(lstat=c(5,10,15)),
+        interval="confidence")
+predict(lm.fit, data.frame(lstat=c(5,10,15)),
+        interval="prediction")
+```
+
+The 95% confidence interval associated with `lstat` value of
+10 is (24.47, 25.63), and the 95% prediction interval is
+(12.828, 37.28). As expected, the confidence and prediction
+intervals are centered around the same point (25.05 for `medv`
+when `lstat` equals 10), but the latter are substantially wider.
+
+We will now plot `medv` and `lstat` along with the least squares
+regression line using the `plot()` and `abline()` functions.
+
+The `abline()` function can be used to draw any line, not just
+the least squares regression line. To draw a line with intercept
+`a` and slope `b`, we type `abline(a,b)`. The `lwd=3()` command 
+causes the width of the regression line to be increased by a 
+factor of 3; this works for the `plot()` and `lines()`  function
+also. We can use the `pch` option to create different plotting
+symbols.
+
+```{r}
+plot(Boston$lstat,Boston$medv)
+abline(lm.fit, lwd=3,col="red")
+```
+
+Four diagnostic plots are automatically produced by
+applying the `plot()` function directly to the output from `lm()`.
+It is often convenient to view all four plots together. We can
+achieve this by using the `par()` function, which tell `R` to
+split the display screen into separete panels so that multiple 
+plots can be viewed simultaneously.
+
+```{r}
+par(mrow=c(2,2))
+plot(lm.fit)
+```
+
+Alternatively, we can compute the residuals from a linear 
+regression fit using the `residuals()` function. The function
+`rstudent()` will return the studentized residuals, and we 
+can use this function to plot the redisuals against the
+fitted values.
+
+```{r}
+plot(predict(lm.fit), residuals(lm.fit))
+plot(predict(lm.fit), rstudent(lm.fit))
+```
+
+On the basis of the residuals plots, there is some evidence
+of non-linearity. Leverage statistics can be computed for any
+number of predictors using the `hatvalues()` function.
+
+The `which.max()` function identifies the index of the largest
+element of a vector. In this case, it tells us which obs has
+the larsgest leverage
+
+```{r}
+plot(hatvalues(lm.fit))
+which.max(hatvalues(lm.fit))
+```
+
+### Multiple Linear Regression
+
+In order to fit a multiple linear regression model using 
+least squres, we again use the `lm()` function.
+
+```{r}
+lm.fit=lm(medv~lstat+age, data=Boston)
+summary(lm.fit)
+```
+
+The `Boston` data set contains 13 variables, and so it would be
+cumbersome to have to tye all of these in order to perform a
+regression using all of the predictors. Instead, we can use the
+following short-hand:
+
+```{r}
+lm.fit=lm(medv~., data=Boston)
+summary(lm.fit)
+```
+
+We can access the individual components of a summary object by
+name. 
+
+```{r}
+summary(lm.fit)$r.sq # give us the R-squared
+summary(lm.fit)$sigma # give us the RSE
+```
+
+The `vif()` function, part of the `car` package, can be used to
+compute variance inflation factors. Most VIF's are low to moderate
+for this data.
+
+```{r}
+library(car)
+vif(lm.fit)
+```
+
+What if we would like to perform a regression using all of the
+variable but one?
+
+```{r}
+lm.fit1=lm(medv~.-age,data=Boston)
+summary(lm.fit1)
+```
+
+### Interaction Terms
+
+It is easy to include interaction terms in a linear model
+using the `lm()` function. The syntax `lstat:black` tells `R`
+to include an interaction term between `lstat` and `black`.
+The syntax `lstat*age` simultaneously includes `lstat`, `age`,
+and the interaction term `lstat`x`age` as predictors; it is
+a shorthand for `lstat+age+lstat:age`.
+
+```{r}
+summary(lm(medv~lstat*age, data=Boston))
+```
+
+
+
