@@ -167,7 +167,7 @@ split the display screen into separete panels so that multiple
 plots can be viewed simultaneously.
 
 ```{r}
-par(mrow=c(2,2))
+par(mfrow=c(2,2))
 plot(lm.fit)
 ```
 
@@ -253,5 +253,143 @@ a shorthand for `lstat+age+lstat:age`.
 summary(lm(medv~lstat*age, data=Boston))
 ```
 
+### Non-linear Transformations of the Predictors
 
+The `lm()` function can also accomodate non-linear transformations
+of the predictors. For instance, given a predictor X, we can
+create a predictor X-squared using `I(X^2)`. The function `I()`
+is needed since the `^` has a special meaning in a formula;
+wrapping as we do allows the standard usage in `R`, which
+is to raise `X` to the power `2`. We now perform a regression
+of `medv` onto `lstat` and `lstat`-squared.
+
+```{r}
+lm.fit2=lm(medv~lstat+I(lstat^2),data=Boston)
+summary(lm.fit2)
+```
+
+The near-zero p-value associated with the quadratic term suggests
+that it leads to an improved model. We use the `anova()` function
+to further quantify the extent to which the quadratitc fit is
+superior to the linear fit.
+
+```{r}
+lm.fit=lm(medv~lstat, data=Boston)
+anova(lm.fit,lm.fit2)
+```
+
+Here Model 1 represents the linear submodel containing only one
+predictor, `lstat`, while Model 2 corresponds to the larger
+quadratic model that has two predictors, `lstat` and `last`-squared.
+The `anova()` function performs a hypothesis test comparing the 
+two models. The null hypothesis is that the two models fit the
+data equally well, and the alternative hypothesis is that the
+full model is superior. Here the F-statistic is 135 and the
+associated p-value is virtually zero. This provides very clear
+evidence that the model containing the predictors `lstat` and
+`last'-squared is far superior to the model that only contains
+the predictor `lstat`. This is not surprising, since earlier we
+saw evidence for non-linearity in the relationship between
+`medv` and `lstat`. If we type
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.fit2)
+```
+
+then we see that when the `lstat`-squared term is included in
+the model, there is little discernible pattern in the residuals.
+
+In order to create a cubic fit, we can include a predictor of the
+form `I(X^3)`. However, this approach can start to get cumbersome
+for highr-order polynomials. A better approach involves using
+the `poly()` function to create the polynomial within `lm()`.
+For example the following command produces a fifth-order
+polynomial fit.
+
+```{r}
+lm.fit5=lm(medv~poly(lstat,5),data=Boston)
+summary(lm.fit5)
+```
+
+This suggests that including additional polynomial terms, up to
+fifth order, leads to an improvement in the model fit. However,
+further investigation of the data reveals that no polynomials
+terms beyond fifth order have significant p-values in regression
+fit.
+
+Of course, we are in no way restricted to using polynomial 
+transformations of the predictors. Here we try a log transformation
+
+```{r}
+summary(lm(medv~log(rm),data=Boston))
+```
+
+### Qualitative Predictors 
+
+We will now examine the `Carseats` data, which is part of the
+`ISLR` library. We will attempt to predict `Sales` in 400
+locations based on a number of predictors.
+
+```{r}
+names(Carseats)
+```
+
+The `Carseats` data includes qualitative predictors such as
+`Shelveloc`, an indicator of the quality of the shelving location,
+the space within a store in which the car seat is displayed, at
+each location. The predictor `Shelveloc` takes on three possible
+values, _Bad_, _Medium_ and _Good_.
+
+Given a qualitative variable such as `Shelveloc`, `R` generates
+dummy variables automatically. Below we fit a multiple regression
+ model that includes some interaction termis.
+ 
+ 
+```{r}
+lm.fit=lm(Sales~.+Income:Advertising+Price:Age,data=Carseats)
+summary(lm.fit)
+```
+
+The `contrast()` function returns the coding that `R` uses
+for the dummy variables.
+
+```{r}
+contrasts(Carseats$ShelveLoc)
+```
+
+`R` has created a `ShelveLocGood` dummy variable that takes on a
+value of 1 if the shelving location is good, and 0 otherwise.
+It has also created a `ShelveLocMedium` dummy variable that 
+equals 1 if the shelving location is medium, and 0 otherwise.
+A bad shelving location corresponds to a zero for each of the
+two dummy variables. The fact that the coefficient for 
+`ShelveLocGood`  in the regression output is positive indicates
+that a good shelvig location is associated with high sales.
+And `ShelveLocMedium` has a smaller positive coefficient,
+indicating that a medium shelving location leads to higher
+sales than a bad shelving location but lower sales than a good
+shelving location.
+
+### Writing Functions
+
+As we have seen, `R` comes with useful functions, and still more
+functions are available by way of `R` libraries. However, we
+will often be interested in performing an operation for which
+no function is available. In this setting, we may want to write
+our own function. For instance, below we provide a simple function
+that reads in the `ISLR` and `MASS` libraries, called 
+`LoadLibraries()`. 
+The `{` symbol informs `R` that multiple commands are about to
+be input.
+
+```{r}
+LoadLibraries=function(){
+  library(ISLR)
+  library(MASS)
+  print("The libraries have been loaded.")
+}
+LoadLibraries # tell us what is in the function
+LoadLibraries() # we call the  function
+```
 
