@@ -49,6 +49,54 @@ typicall denoted using the symbol $Y$.
 _features_ or _variables_.
 + The output variable is often called _response_ or _dependent variable_
 
+More generally, suppose that we observe a quantitative response $Y$
+and $p$ different predictors, $X_1$,$X_2$,...,$X_p$. We assume that
+there is some relationship between $Y$ and $X=(X_1,X_2,…,X_p)$ which
+can be written in the very general form
+
+$$Y=f(X)+\epsilon$$
+
+$f$ is some fixed but unknown function of $X_1,…,X_p$, and $\epsilon$
+is a random _error term_, which is independent of $X$ and has mean
+zero. 
+$f$ represents the _systematic_ information that $X$ provides about $Y$.
+
+As another example, consider the plot of **`Income`** versus
+**`Years of education`** for 30 individuals in the **`Income`**
+data set. The plot suggests tthat one might be able to predict 
+income using years of **`Education`**. However, the function $f$
+that connects the input variable to the output variable is in
+general unkwnow. Since **`Income`** is a simulated data set, $f$
+is known and is shown by the blue curve. The vertical lines represent
+the error terms $\epsilon$, overall, the errors have approximately
+mean zero.
+
+```{r echo=FALSE, fig.width=8}
+Income = read.csv("Income1.csv")
+par(mfrow=c(1,2))
+plot(Income$Education,Income$Income,col="red", pch=20,
+     xlab="Years of Education",ylab="Income")
+nls.fit <- nls(Income~d+(a/(1+exp(-b*(Education-c)))),data=Income,
+               start=list(a=90,b=0.5,c=15,d=20))
+plot(Income$Education,Income$Income,col="red", pch=20,
+     xlab="Years of Education",ylab="Income")
+lines(Income$Education,fitted(nls.fit),lwd=2,col="blue")
+npoints <- length(Income$Income)
+for (k in 1: npoints) lines(c(Income$Education[k],Income$Education[k]),
+                            c(Income$Income[k],fitted(nls.fit)[k]))
+```
+
+In essence, statistical learning refers to a set of approaches for 
+estimating $f$.
+
+#### Why Estimate $f$ ?
+
+There are two main reasons that we may wish to estimate $f$:
+_prediction_ and _inference_.
+
+**Prediction**
+
+
 
 Load the `Auto` data set. This data set is part of the `ISLR` library.
 
