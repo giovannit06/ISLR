@@ -96,6 +96,94 @@ _prediction_ and _inference_.
 
 **Prediction**
 
+In many situations, a set of inputs $X$ are readily available,
+but the output $Y$ cannot be easily obtained. In this setting,
+since the error term averages to zero, we can predict $Y$ using
+
+$$\hat{Y}=\hat{f}(X)$$
+
+where $\hat{f}$ represent our estimate for $f$, and $\hat{Y}$ 
+represents the resulting prediction for $Y$. 
+$\hat{f}$ is often treated as a _black box_, we're not typically
+concerned with the exact form of $\hat{f}$, provided that it yields
+accurate predictions for $Y$.
+
+The accuracy of $\hat{Y}$ as a prediction for $Y$ depends on two
+quantities, which we will call the _reducible error_ and the
+_irreducible error_. In general, $\hat{f}$ will not be a perfect
+estimate for $f$, and this inaccuracy will introduce some error.
+
+This error is  _reducible_ because we can potentially improve the
+accuracy of $\hat{f}$ by using the most appropriate statistical
+learning technique to estimate $f$. Howeve, even if it were
+possible to form a perfect estimate for $f$, $\hat{Y}=f(X)$, our
+prediction would still have some error in it! This is because $Y$
+is also a function of $\epsilon$, which cannot be predict using $X$.
+This is known as the _irreducible error_ because no matter how well
+we estimate $f$, we cannot reduce introduced by $\epsilon$.
+
+**Inference**
+
+We are often interested in urderstanding the way that $Y$ is affected
+as $X_1,…,X_p$ change. We wish to estimate $f$, but our goal is
+not necessarily to make predictions for $Y$. We want to understand
+how $Y$ changes as a function of $X_1,…,X_p$. Now $\hat{f}$ cannot be
+treated as a black box, because we need to know its exact form.
+One may be interested in answering the following questions:
+
+- _Which predictors are associated with the response?_ This is the 
+  case when only a small fraction of the available predictors are
+  substantially associated with $Y$.
+- _What is the relationship between the response and each predictor?_
+  Some predictors may have a positive relationship with $Y$, in the
+  sense that increasing the predictor is associated with increasing
+  values of $Y$. Other predictors may have the opposite 
+  relationship.
+- _Can the relationship between $Y$ and each predictor be adequately_
+  _summarized using a linear equation, or is the relationship_
+  _more complicated?_ Often the true relationship is more
+  complicated, in which case a linear model may not provide an
+  accurate representation of the relationship between the input
+  and output variables.
+
+For instance, consider a company that is interested in conducting a 
+direct-marketing campaign. The goal is to identify individuals
+who will respond positively to a mailing, based on observation of
+demographic variables measured on each individual. The company is
+not interested in obtaining a deep undestanding of the relationship
+between each individual predictor and the response; instead, the
+company simply wants an accurate model to predict the response
+using the predictors. This is an example of modelling for _prediction_.
+
+In contrast, consider the **`Advertising`** data. One may be 
+interested  in answering questions such as:
+
+- _Which media contribute to sales?_
+- _Which media generate the biggest boost in sales?_
+- _How much increase in sales is associated with a given increase_
+  _in TV advertising?_
+
+This situation falls into the _inference_ paradigm.
+
+Finally, some modelling could be conducted both for prediction and
+inference. For example, in a real estate setting, one may seek to
+relate values of homes to inputs such as crime rate, zoning, distance
+from a river, air quality, schools, income level of community, 
+size of houses, and so forth. In this case one might be interested
+in how the individual input variables affect the prices, 
+_how much extra will a house be worth if it has a view of the river?_
+This is an _inference problem_. Alternatively, one may simply be
+interested in predicting the value of a home given it's characteristics:
+_is this house under- or over-valued?_ This is a _prediction problem_.
+
+_Linear models_ allow for relatively simple and interpretable
+inference, but may not yield as accurate predictions as some other
+approaches. In contrast, some of the highly non-linear approaches
+can potetially provide quite accurate predictions for $Y$, but this
+comes at the expense of a less interpretable model for which 
+inference is more challenging.
+
+#### How Do We Estimate $f$?
 
 
 Load the `Auto` data set. This data set is part of the `ISLR` library.
