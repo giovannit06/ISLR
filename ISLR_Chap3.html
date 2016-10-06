@@ -115,9 +115,29 @@ $(document).ready(function () {
 </div>
 
 
-<div id="chapter-3" class="section level2">
-<h2>Chapter 3</h2>
+<div id="chapter-3---linear-regression" class="section level2">
+<h2>Chapter 3 - Linear Regression</h2>
+<p>Linear regression is a useful tool for predicting a quantitative response. Recall the <em><code>Advertising</code></em> data that contains <em><code>sales</code></em>. for a particular product as a function of advertising budget for <em><code>TV</code></em>, <em><code>radio</code></em>, <em><code>newspaper</code></em> media. Suppose that as statistical consultant we are asked to suggest, on the basis of this data, a marketing plan for next year that will result in high product sales. What information would be useful in order to provide such a reccomendation? Here are a few important questions that we might seek to address:</p>
+<ol style="list-style-type: decimal">
+<li>Is there a relationship between advertising budget and sales ?</li>
+<li>How strong is the relationship between advertising budget and sales ?</li>
+<li>Which media contribute to sales?</li>
+<li>How accurately can we estimate the effect of each medium on sales ?</li>
+<li>How accurately can we predict future sales ?</li>
+<li>Is the relationship linear ?</li>
+<li>Is there synergy among the advertising media?</li>
+</ol>
 <div id="simple-linear-regression" class="section level3">
+<h3>Simple Linear Regression</h3>
+<p><em>Simple linear regression</em> lives up to its name it is a very straightforward approach for predicting a quantitative response <span class="math inline">\(Y\)</span> on the basis of a single predictor variable <span class="math inline">\(X\)</span>. It assumes that there is approximately a linear relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</p>
+<p><span class="math display">\[Y\approx\beta_0+\beta_1X\]</span></p>
+<p>You might read “<span class="math inline">\(\approx\)</span>” as “<em>is approximately modeled as</em>”. We will sometimes describe the equation by saying that we are <em>regressing Y on X</em>. For example, <span class="math inline">\(X\)</span> may represent <em><code>TV</code></em> advertising and <span class="math inline">\(Y\)</span> may represent <em><code>sales</code></em>. Then we can regress <em><code>sales</code></em> onto <em><code>TV</code></em> by fitting the model.</p>
+<p><span class="math display">\[\textbf{sales}\approx\beta_0+\beta_1\times\textbf{TV}\]</span></p>
+<p><span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are two unknown constants that represent the <em>intercept</em> and <em>slope</em> terms in the linear model. Together, they are known as the model <em>coefficients</em> or <em>parameters</em>. Once we have used our training data to produce estimates <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> for the model coefficients, we can predict future sales on the basis of a particular value of TV advertising by computing</p>
+<p><span class="math display">\[\hat{y}=\hat{\beta}_0+\hat{\beta}_1x\]</span></p>
+<p>where</p>
+</div>
+<div id="simple-linear-regression-1" class="section level3">
 <h3>Simple Linear Regression</h3>
 <p>Here we load the <code>MASS</code> package, which is a very large collection of data sets and functions. We also load the ISLR package, which includes the data sets assoctiated with the book.</p>
 <pre class="r"><code>library(MASS)

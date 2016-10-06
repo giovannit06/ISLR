@@ -6,7 +6,60 @@ output: html_document
 ---
 
 
-## Chapter 3
+## Chapter 3 - Linear Regression
+
+Linear regression is a useful tool for predicting a quantitative
+response. Recall the *`Advertising`* data that contains *`sales`*.
+for a particular product as a function of advertising budget for 
+*`TV`*, *`radio`*, *`newspaper`* media. Suppose that as statistical
+consultant we are asked to suggest, on the basis of this data,
+a marketing plan for next year that will result in
+high product sales. What information would be useful in order
+to provide such a reccomendation? Here are a few important questions
+that we might seek to address:
+
+1. Is there a relationship between advertising budget and sales ?
+2. How strong is the relationship between advertising budget and
+   sales ?
+3. Which media contribute to sales?
+4. How accurately can we estimate the effect of each medium on sales ?
+5. How accurately can we predict future sales ?
+6. Is the relationship linear ?
+7. Is there synergy among the advertising media? 
+
+
+### Simple Linear Regression
+
+_Simple linear regression_ lives up to its name it is a very 
+straightforward approach for predicting a quantitative response
+$Y$ on the basis of a single predictor variable $X$. It assumes 
+that there is approximately a linear relationship between $X$ and
+$Y$.
+
+$$Y\approx\beta_0+\beta_1X$$
+
+You might read "$\approx$" as "_is approximately modeled as_".
+We will sometimes describe the equation by saying that we are
+_regressing Y on X_. For example, $X$ may represent *`TV`*
+advertising and $Y$ may represent *`sales`*. Then we can regress
+*`sales`* onto *`TV`* by fitting the model.
+
+$$\textbf{sales}\approx\beta_0+\beta_1\times\textbf{TV}$$
+
+$\beta_0$ and $\beta_1$ are two unknown constants that represent
+the _intercept_ and _slope_ terms in the linear model. Together,
+they are known as the model _coefficients_ or _parameters_.
+Once we have used our training data to produce estimates $\hat{\beta}_0$
+and $\hat{\beta}_1$ for the model coefficients, we can predict
+future sales on the basis of a particular value of TV advertising
+by computing
+
+$$\hat{y}=\hat{\beta}_0+\hat{\beta}_1x$$
+
+where
+
+
+
 
 ### Simple Linear Regression
 
