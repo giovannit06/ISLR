@@ -56,10 +56,61 @@ by computing
 
 $$\hat{y}=\hat{\beta}_0+\hat{\beta}_1x$$
 
-where
+where $\hat{y}$ indicates a prediction of $Y$ of the basis of $X=x$.
+Here we use a _hat_ symbol, ^, to denote the estimated value for
+un unknown parameter or coefficient, or to denote the predicted value
+of the response.
 
+#### Estimating the Coefficients
 
+In practice, $\beta_0$ and $\beta_1$ are unknown. So before
+we can make predictions, we must use data to estimate the coefficients.
+Let
 
+$$(x_1,y_1),(x_2,y_2),…,(x_n,y_n)$$
+
+represent $n$ observation pairs, each of which consists of a 
+measurement of $X$ and a measurement of $Y$. In the *`Advertising`*
+example, this data set consist of the TV advertising budget and 
+product sales in $n=200$ different markets. Our goal is to obtain 
+coefficient estimates $\hat{\beta}_0$ and $\hat{\beta}_1$ such that
+the linear model fits the available data well so that
+$y_i\approx\hat{\beta}_0+\hat{\beta}_1x_i$ for $i=1,…,n$. In other
+words, we want to find a intercept $\hat{\beta}_0$ and a slope
+$\hat{\beta}_1$ such that the resulting line is as close as 
+possible to the $n=200$ data points.
+
+There are a number of ways of measuring _closeness_. However,
+by far the most common approach involves minimizing the _last squares_
+criterion.
+
+```{r echo=FALSE, fig.width=9}
+Advertising = read.csv("Advertising.csv")
+#names(Advertising)
+lm.fit.TV=lm(Sales~TV,data=Advertising)
+plot(Advertising$TV,Advertising$Sales,col="red",
+     xlab="TV",ylab="Sales",pch=20)
+abline(lm.fit.TV,lwd=2,col="blue")
+npoints <- length(Advertising$Sales)
+for (k in 1: npoints) lines(c(Advertising$TV[k],Advertising$TV[k]),
+                            c(Advertising$Sales[k],fitted(lm.fit.TV)[k]),
+                            col="grey")
+```
+
+Let $\hat{y}_i=\hat{\beta}_0+\hat{\beta}_1x_1$ be the prediction
+for $Y$ based on the $i$ th value of $X$. Then $e_i=y_i-\hat{y}_i$
+represent the $i$ th _residual_, this is the difference between
+the $i$ th observed response value and the $i$ th response value
+that is predicted by our linear model. We define the
+_residual sum of squares_ (RSS) as
+
+$$RSS=e_1^2+e_2^2+…+e_n^2$$
+
+or equivalently as 
+
+$$RSS = (y_1-\hat{\beta}_0-\hat{\beta}_1x_1)^2+(y_2-\hat{\beta}_0-\hat{\beta}_1x_2)^2+…+(y_n-\hat{\beta}_0-\hat{\beta}_1x_n)^2$$
+
+The least squares
 
 ### Simple Linear Regression
 
