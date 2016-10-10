@@ -402,8 +402,124 @@ a _proportion_, the proportion of variance explained, and so it
 always takes on a value between 0 and 1, and is independent of
 the scale of Y.
 
+To calculate $R^2$, we use the formula
 
+$$R^2=\frac{TSS-RSS}{TSS}=1-\frac{RSS}{TSS}$$
 
+where $TSS=\sum(y_i-\bar{y})^2$ is the _total sum of squares_, and
+$RSS=\sum_{i=1}^{n}(y_i-\hat{y}_i)^2$. TSS measures the total 
+variance in the response $Y$, and can be thought of as the amount
+of variability inherent in the response before the regressino
+is performed. In contrast, RSS measures the amount of variability
+that is left unexplained after performing the regression. Hence,
+$TSS-RSS$ measures the amount of variability in the response that 
+is explained by performing the regression, and $R^2$ measures the
+_proportion of variability in Y that can be explained using X_.
+An $R^2$ statistic that is close to 1 indicates that a large
+proportion of the variability in the response has been explained 
+by the regression. A number near 0 indicates that the regression
+did not explain much of the variability in the response; this
+might occur because the linear model is wrong, or the inherent
+error $\sigma^2$ is high, or both. In the previous table, the 
+$R^2$ was 0.61, and so just under two-thirds of the variability 
+in *`sales`* is explained by a linear regression on *`TV`*.
+
+The $R^2$ statistic has an interpretational advantage over the RSE,
+since unlike the RSE, it always lies between 0 and 1. However,
+it can still be challenging to determine what is _good $R^2$_ value,
+and in general, this will depend on the application. For instance,
+in certain problems in physics, we may know that the data truly
+comes from a linear model with a small residual error. In this
+case, we would expect to see an $R^2$ value that is extremely
+close to 1, and a substantially smaller $R^2$ value might indicate
+a serious problem with the experiment in which the data were
+generated. On the other hand, in typical applications in biology,
+psychology, marketing, and other domains, the linear model is at
+best an extremely rough approximation to the data and residual 
+errors due to other unmeasured factors are often very large.
+In this setting, we would expect only a very small proportion of
+the variance in the response to be explained by the predictor,
+and an $R^2$ value well below 0.1 might be more realistic!
+
+The $R^2$ statistic is a measure of the linear relationship between
+$X$ and $Y$. Recall that _correlation_, defined as
+
+$$Cor(X,Y)=\frac{\sum_{i=1}^{n}(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^{n}(y_i-\bar{y})^2}}$$
+
+is also a measure of the linear relationship between $X$ and $Y$. 
+This suggests that we might be able to use $r=Cor(X,Y)$ instead
+of $R^2$ in order to asses the fit of the linear model. In fact,
+it can be shown that in the simple linear regression setting,
+$R^2=r^2$. In other words, the squared correlation and the $R^2$ 
+statistic are identical.
+
+### Multiple Linear Regression
+
+Simple linear regression is a useful approach for predicting a 
+response on the basis of a sigle predictor variable. However, in
+practice we often have more than one predictor. For example, in 
+the *`Advertising`* data, we have examined the relationship
+between sales and TV advertising. We also have data for the
+amount of money spent advertising on the radio and in newspapers,
+and we may want to know whether either of these two media is
+associated with sales. How can we extend our analysis of the
+advertising data in order to accomodate these two additional 
+predictors?
+
+One option is to run three separate simple linear regressions,
+each of which uses a different advertising medium as a predictor.
+For instance, we can fit a simple linear regression to predict
+sales on the basis of the amount spent on radio advertisements.
+
+```
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  9.31164    0.56290  16.542   <2e-16 ***
+## Radio        0.20250    0.02041   9.921   <2e-16 ***
+##
+##
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 12.35141    0.62142   19.88  < 2e-16 ***
+## Newspaper    0.05469    0.01658    3.30  0.00115 ** 
+```
+
+We find that a $1000 increase in spending on radio advertising
+is associated with an increase in sales by around 203 units.
+A $1000 increase in newspaper advertising budget is associated with
+an increase in sales by approximately 55 units.
+
+However, the approach of fitting a separate simple linear
+regression model for each predictor is not entirely satisfactory.
+First of all, it is unclear how to make a single prediction
+of sales given levels of the three advertising media budgets,
+since each of the budgets is associated with a separate regression
+equation. Second, each of the three regression equations ignores
+the other two media in forming estimates for the regression
+coefficients. We will see that if the media budgets are correlated
+with each other in the 200 markets that constitute our data set,
+then this can lead to very misleading estimates of the individual
+media effects on sales.
+
+Instead of fitting a separate simple linear regression model
+for each predictor, a better approach is to extend the simple
+linear regression model so that it can directly accomodate
+multiple predictors. We can do this by giving each predictors
+a separate slope coefficient in a single model. In geeneral,
+suppose that we have $p$ distinct predictors. Then the multiple
+linear regression model thakes the form
+
+$$Y=\beta_0+\beta_1 X_1+\beta_2 X_2+\cdots+\beta_p X_p+\epsilon$$
+
+where $X_j$ represent the $j$ th predictor and $\beta_j$ quantifies
+the association between that variable and the response. We interpret
+$\beta_j$ as the _average_ effect on $Y$ of a one unit increase 
+in $X_j$, _holding all other predictors fixed_. In the advertising
+example, becames
+
+$$sales=\beta_0+\beta_1\times TV+\beta_2\times radio+\beta_3\times newspaper + \epsilon$$
+
+#### Estimating the Regression Coefficients
 
 
 
