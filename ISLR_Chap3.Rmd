@@ -521,6 +521,129 @@ $$sales=\beta_0+\beta_1\times TV+\beta_2\times radio+\beta_3\times newspaper + \
 
 #### Estimating the Regression Coefficients
 
+As was the case in the simple linear regression setting, the
+regression coefficients $\beta_0,\beta_1,\ldots,\beta_p$ are
+unknown, and must be estimated. Given estimates
+$\hat{\beta_0},\hat{\beta_1},\ldots,\hat{\beta_p}$, we can make
+predictions using the formula
+
+$$\hat{y}=\hat{\beta_0}+\hat{\beta_1}x_1+\hat{\beta}_2x_2+\cdots+\hat{\beta_p}x_p$$
+
+The parameters are estimated using the same least squares approach that
+we saw in the context of simple linear regression. We choose 
+$\hat{\beta_0},\hat{\beta_1},\ldots,\hat{\beta_p}$ to minimize the 
+sum of squared residuals
+
+$$RSS=\sum_{i=1}^{n}(y_i-\hat{y}_i)^2=\sum_{i=1}^{n}(y_i-\hat{\beta_0}-\hat{\beta_1}x_{i1}-\hat{\beta}_2x_{i2}-\cdots-\hat{\beta_p}x_{ip})^2$$
+
+Any statistical software package can be used to compute the 
+the multiple least squares regression estimates, $\hat{\beta_0},\hat{\beta_1},\ldots,\hat{\beta_p}$ that minimize the equation.
+
+```
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  2.938889   0.311908   9.422   <2e-16 ***
+## TV           0.045765   0.001395  32.809   <2e-16 ***
+## Radio        0.188530   0.008611  21.893   <2e-16 ***
+## Newspaper   -0.001037   0.005871  -0.177     0.86  
+```
+
+The table displays the multiple regression coefficient estimates
+when TV, radio and newspaper advertising budgets are used to
+predict product sales using the *`Advertising`* data. We 
+interpret these results as follows: for a given amount of TV
+and newspaper advertising, spending an additional $1000
+on radio advertising leads to an increase in sales by
+approximately 189 units. Comparing these coefficient estimates
+to those displayed previously, we notice that the multiple
+regression coefficient estimates for *`TV`* and *`radio`* are
+pretty similar to the simple linear regression coefficient 
+estimates. However, while the *`newspaper`* regression coefficient
+estimate for *`newspaper`* in the multiple regression model
+is close to zero, and the corresponding p-value is no longer
+significant, with a value around 0.86. This illustrates that the
+simple and multiple regression coefficients can be quite different.
+This difference stems from the fact that in the simple regression
+case, the slope term represents the average effect of a $1000
+increase in newspaper advertising, ignoring other predictors such
+as *`TV`* and *`radio`*. In contrast, in the multiple regression
+setting, the coefficient for *`newspaper`* represents the average
+effect of increasing newspaper spending by $1000 while holding
+*`TV`* nad *`radio`* fixed.
+
+Does it make sense for the multiple regression to suggest no
+relationship between *`sales`* and *`newspaper`* while the
+simple linear regression implies the opposite ? In fact it does.
+
+Consider the correlation matrix for the three predictor variables
+and response variable. 
+
+```{r echo=FALSE}
+cor(Advertising[2:5])
+```
+
+Notice that the correlation between *`radio`* and *`newspaper`* 
+is 0.35. This reveals a tendency to spend more on newspaper
+advertising in markets where more is spent on radio advertising.
+Now suppose that the multiple regression is correct and newspaper
+advertising has no direct impact on sales, but radio advertising
+does increase sales. Then in markets where we spend more on radio
+our sales will tend to be higher, and as our correlation matrix
+shows, we also tend to spend more on newspaper advertising in
+those same markets. Hence, in a simple linear regression which
+only examines *`sales`* versus *`newspaper`*, we will observe
+that higher values of *`newspaper`* tend to be associated with
+higher values of *`sales`*, even though newspaper advertising
+does not actually affect sales. So *`newspaper`* sales are a 
+surrogate for *`radio`* advertising; *`newspaper`* gets "credit"
+for the effect of *`radio`* on *`sales`*.
+
+The slightly countreintuitive result is very common in many
+real life situations. Consider an absurd example to illustrate
+the point. Running a regression of shark attacks versus ice
+cream sales for data collected at a given beach community
+over a period of time would show a positive relationship,
+similar to that seen between *`sales`* and *`newspaper`*. Of course
+no one has suggested that ice creams should be banned at beaches
+to reduce shark attacks. In reality, higher temperatures cause
+more people to visit the beach, which in turn result in more
+ice cream salse and more shark attacks. A multiple regression
+of attacks versus ice cream sales and temperature reveals that
+the former predictor is no longer significant after adjusting
+for temperature.
+
+#### Some Important Questions
+
+When we perform multiple linear regression, we usally are 
+interested in answering a few important questions.
+
+1. _Is at least one of the predictors $X_1,X_2,\ldots,X_p$_
+_useful in predicting the response ?_
+2. _Do all the predictors help to explain $Y$, or is only a_
+_subset of the predictors useful?_
+3. _How well doeas the model fit the data ?_
+4. _Given a set of predictor values, what response value should_
+_we predict and how accurate is our prediction ?_
+
+**One: Is There a Relationship Between the Response and Predictors?**
+
+Recall that in the simple linear regression settin, in order to 
+determine wheter there is a relationship between the response
+and the predictor we can simply check whether $\beta_1=0$. In
+the multiple regression setting with $p$ predictors, we need to
+ask whether all of the regression coefficients are zero, i.e.
+whether $\beta_1=\beta_2=\cdots=\beta_p=0$. As in the simple
+linear regression settings, wu use a hypothesis test to answer
+this question. We test the null hypothesis,
+
+$$H_0:\beta_1=\beta_2=\cdots=\beta_p=0$$
+
+versus the alternative
+
+$$H_a:at least one \beta_j is non-zero$$
+
+This hypothesis test is performed by computing the _F-statistic_,
+where, as 
 
 
 ### Simple Linear Regression
